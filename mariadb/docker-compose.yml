@@ -1,0 +1,16 @@
+version: "3"
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb-data:/var/lib/mysql:cached
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: "root"
+networks:
+  default:
+    name: proxy
+    external: true
