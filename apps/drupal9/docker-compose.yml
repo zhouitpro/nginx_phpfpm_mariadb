@@ -1,32 +1,16 @@
 version: '3.9'
 services:
   nginx:
-    build: docker/nginx
-#    image: nginx:latest
+    image: sparkpos/docker-nginx-php:8.1-alpine
     container_name: drupal9
-    hostname: farmos.docker
-    command:
-      /bin/sh -c "envsubst '$$DRUPAL_WEB_ROOT' < /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    hostname: drupal9.docker
     environment:
       - VIRTUAL_HOST=drupal9.docker
       - DRUPAL_WEB_ROOT=web
+      - PHP_MEM_LIMIT=2048M
     volumes:
       - /Users/zhouitpro/www/drupal9:/var/www/html
-#      - ./default.conf:/etc/nginx/conf.d/default.conf
-      - ./default.conf:/etc/nginx/nginx.conf.template
     restart: always
-#    depends_on:
-#      - php-fpm
-
-  php-fpm:
-    build: docker/php-fpm
-    container_name: drupal9-php-fpm
-    restart: always
-    volumes:
-      - /Users/zhouitpro/www/drupal9:/var/www/html
-      - ./php/php.ini-development:/usr/local/etc/php/php.ini
-    environment:
-      XDEBUG_MODE: "debug"
 networks:
   default:
     name: proxy
